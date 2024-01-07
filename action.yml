@@ -1,0 +1,49 @@
+name: Docker Extract
+description: Extract file(s) from a Docker Image
+branding:
+  icon: scissors
+  color: blue
+inputs:
+  image:
+    description: Docker Image to extract files from
+    required: true
+  sources:
+    description: Path(s) to a file or directory from the image.  Relative paths are relative to the image's working directory.
+    required: true
+  destination:
+    description: Destination path for the extracted files
+    required: true
+    default: dist
+  cleanup:
+    description: Remove the container after extracting files
+    required: false
+    default: true
+  follow-link:
+    description: Always follow symbol link in `sources`
+    required: false
+    default: false
+outputs:
+  destination:
+    description: Destination of extracted file(s)
+    value: ${{ steps.cp.outputs.destination }}
+runs:
+  using: composite
+  steps:
+  - uses: actions/github-script@v7
+    id: cp
+    env:
+      INPUT_IMAGE: ${{ github.event.inputs.image }}
+      INPUT_SOURCES: ${{ github.event.inputs.sources }}
+      INPUT_DESTINATION: ${{ github.event.inputs.destination }}
+      INPUT_FOLLOW-LINK: ${{ github.event.inputs.follow-link }}
+      INPUT_CLEANUP: ${{ github.event.inputs.cleanup }}
+    with:
+      script: |-
+        const path = require('path')
+
+        require(
+          path.resolve(process.env.GITHUB_ACTION_PATH, 'src/main.js')
+        )({github, context})
+
+
+
