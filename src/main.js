@@ -17,10 +17,10 @@ async function run () {
   const { stdout: containerId } = await exec.getExecOutput(
     'docker', ['create', image],
   )
-  const { stdout: containerMetadat } = await exec.getExecOutput(
+  const { stdout: containerMetadata } = await exec.getExecOutput(
     'docker', ['inspect', containerId.trim()],
   )
-  let [ container ] = JSON.parse(containerMetadat)
+  let [ container ] = JSON.parse(containerMetadata)
 
   // Create `destination` directory
   await io.mkdirP(destination)
