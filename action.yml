@@ -25,7 +25,6 @@ inputs:
 outputs:
   destination:
     description: Destination of extracted file(s)
-    value: ${{ steps.cp.outputs.destination }}
 runs:
   using: node20
   main: dist/index.js
