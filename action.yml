@@ -1,8 +1,8 @@
 name: Docker Extract
 description: Extract file(s) from a Docker Image
 branding:
-  icon: scissors
-  color: blue
+  icon: download
+  color: yellow
 inputs:
   image:
     description: Docker Image to extract files from
