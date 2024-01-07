@@ -27,18 +27,5 @@ outputs:
     description: Destination of extracted file(s)
     value: ${{ steps.cp.outputs.destination }}
 runs:
-  using: composite
-  steps:
-  - uses: actions/github-script@v7
-    id: cp
-    env:
-      INPUT_IMAGE: ${{ github.event.inputs.image }}
-      INPUT_SOURCES: ${{ github.event.inputs.sources }}
-      INPUT_DESTINATION: ${{ github.event.inputs.destination }}
-      INPUT_FOLLOW-LINK: ${{ github.event.inputs.follow-link }}
-      INPUT_CLEANUP: ${{ github.event.inputs.cleanup }}
-    with:
-      script: |-
-        const path = require('path')
-        const { run } = require(path.resolve(process.env.GITHUB_ACTION_PATH, 'src/main.js'))
-        run()
+  using: node20
+  main: dist/index.js
