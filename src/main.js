@@ -3,7 +3,7 @@ const core = require('@actions/core')
 const exec = require('@actions/exec')
 const io = require('@actions/io')
 
-module.exports = async () => {
+async function run () {
   const image = core.getInput('image')
   const sources = core.getMultilineInput('sources')
   const destination = core.getInput('destination')
@@ -17,10 +17,10 @@ module.exports = async () => {
   const { stdout: containerId } = await exec.getExecOutput(
     'docker', ['create', image],
   )
-  let { stdout: container } = await exec.getExecOutput(
+  const { stdout: containerMetadat } = await exec.getExecOutput(
     'docker', ['inspect', containerId.trim()],
   )
-  [ container ] = JSON.parse(container)
+  let [ container ] = JSON.parse(containerMetadat)
 
   // Create `destination` directory
   await io.mkdirP(destination)
@@ -38,4 +38,8 @@ module.exports = async () => {
   } else {
     core.setOutput('container', container)
   }
+}
+
+module.exports = {
+  run
 }
