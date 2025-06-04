@@ -5,17 +5,33 @@ const io = require('@actions/io')
 
 async function run () {
   const image = core.getInput('image')
+  const platform = core.getInput('platform')
   const sources = core.getMultilineInput('sources')
   const destination = core.getInput('destination')
   const cleanup = core.getBooleanInput('cleanup')
+
+  core.info(`Check parameter: platform = ${platform}`)
 
   // Generate options for `docker cp`
   const optionsForCP = []
   if (core.getBooleanInput('follow-link')) options.push('--follow-link')
 
+  // Pull image
+  const pullArgs = ['pull']
+  if (platform) {
+    pullArgs.push('--platform', platform)
+  }
+  pullArgs.push(image)
+  await exec.exec('docker', pullArgs)
+
   // Create container
+  const createArgs = ['create']
+  if (platform) {
+    createArgs.push('--platform', platform)
+  }
+  createArgs.push(image)
   const { stdout: containerId } = await exec.getExecOutput(
-    'docker', ['create', image],
+    'docker', createArgs,
   )
   const { stdout: containerMetadata } = await exec.getExecOutput(
     'docker', ['inspect', containerId.trim()],

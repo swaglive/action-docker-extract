@@ -22,6 +22,10 @@ inputs:
     description: Always follow symbol link in `sources`
     required: false
     default: false
+  platform:
+    description: 'Platform for docker create'
+    required: false
+    default: linux/amd64
 outputs:
   destination:
     description: Destination of extracted file(s)
